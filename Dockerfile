@@ -1,15 +1,16 @@
-FROM php:7.4-fpm-alpine
+FROM python:3.11-alpine
 
-RUN apk add --no-cache openssl bash mysql-client nodejs npm nano vim
-RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+ENV PYTHONUNBUFFERED=1
 
-WORKDIR /var/www
+# Instalação do pacote necessário
+RUN apk add --no-cache gcc musl-dev linux-headers libffi-dev openssl-dev postgresql-dev mariadb-dev
 
-RUN rm -rf /var/www/html
-RUN ln -s public html
+WORKDIR /code
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ADD . /code
 
-EXPOSE 80
+COPY ./requirements.txt /code/requirements.txt
 
-ENTRYPOINT [ "php-fpm" ]
+RUN pip install -r requirements.txt
+
+COPY . /code
