@@ -6,3 +6,34 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/code
+    environment:
+      - DEBUG=True
+      - DJANGO_ALLOWED_HOSTS=*
+      - DB_HOST=db
+      - DB_NAME=Uniforca
+      - DB_USER=root
+      - DB_PASSWORD=root
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ruuti
+      MYSQL_DATABASE: Uniforca
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306"
+    volumes:
+      - ./.docker/db:/var/lib/mysql # Mapeando o volume local para o diretório do MySQL dentro do contêiner
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
