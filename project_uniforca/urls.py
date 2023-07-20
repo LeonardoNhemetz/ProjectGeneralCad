@@ -2,6 +2,6 @@ from django.urls import path
 from app_uniforca import views
 
 urlpatterns = [
-    path('', views.home,name='home'),
-    path('usuarios/', views.usuarios,name='listagem_usuarios'),
+    path('', views.login, name='login'),
+    path('usuarios/', views.usuarios, name='listagem_usuarios'),
 ]
